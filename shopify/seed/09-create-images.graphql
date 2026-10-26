@@ -1,0 +1,16 @@
+# Uploads the placeholder photos once each to Shopify Files (Shopify fetches them from Unsplash).
+# Variables come from images.variables.json (built by build-images.mjs). Results go to out-09-images.json.
+mutation CreateProductImages($files: [FileCreateInput!]!) {
+  fileCreate(files: $files) {
+    files {
+      id
+      alt
+      fileStatus
+    }
+    userErrors {
+      field
+      message
+      code
+    }
+  }
+}

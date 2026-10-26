@@ -3,11 +3,15 @@
 //
 //   node build-products.mjs --location gid://shopify/Location/123   → writes products.jsonl
 //   node build-products.mjs --sample                                → prints one product as an inline mutation (for validation)
+//
+// Once out-09-images.json exists (the uploaded photos), each product gets its images and each
+// variant the photo for its colour.
 
-import { writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { products, APPAREL, DEFAULT_STOCK } from './catalog.mjs';
+import { IMAGES, PRODUCT_IMAGES } from './images.mjs';
 
 const { values: args } = parseArgs({ options: { location: { type: 'string' }, sample: { type: 'boolean' } } });
 const locationId = args.location ?? (args.sample ? 'gid://shopify/Location/1' : null);
@@ -15,6 +19,22 @@ if (!locationId) {
   console.error('Pass --location <gid://shopify/Location/...> (from 01-check-store.graphql), or --sample.');
   process.exit(1);
 }
+
+// Image key → Shopify file ID. fileCreate returns files in the order they were sent (build-images.mjs order).
+function loadImageIds() {
+  const keys = Object.keys(IMAGES);
+  if (args.sample) return Object.fromEntries(keys.map((key, i) => [key, `gid://shopify/MediaImage/${i + 1}`]));
+  const path = fileURLToPath(new URL('./out-09-images.json', import.meta.url));
+  if (!existsSync(path)) return null;
+  const result = JSON.parse(readFileSync(path, 'utf8').split('\n').filter((l) => !l.includes('"type":"progress"')).join('\n'));
+  const files = result.fileCreate?.files ?? [];
+  if (files.length !== keys.length || files.some((f, i) => f.alt !== IMAGES[keys[i]].alt)) {
+    console.error('out-09-images.json does not line up with images.mjs; re-run the image upload.');
+    process.exit(1);
+  }
+  return Object.fromEntries(keys.map((key, i) => [key, files[i].id]));
+}
+const imageIds = loadImageIds();
 
 const COLOUR_CODE = { Black: 'BLK', Charcoal: 'CHR', 'Off-white': 'OWH', Silver: 'SLV', Gunmetal: 'GUN' };
 const SIZE_CODE = { 'One size': 'OS', Adjustable: 'ADJ', 'UK 3–6': 'UK3-6', 'UK 6–9': 'UK6-9', 'UK 9–12': 'UK9-12' };
@@ -58,6 +78,11 @@ function productLine(p) {
   const sizes = p.sizes ?? APPAREL;
   const sku = baseSku(p);
   const quantity = (colour, size) => (p.stock ? (p.stock[colour]?.[size] ?? 0) : p.soldOut ? 0 : DEFAULT_STOCK);
+  const pictures = imageIds ? PRODUCT_IMAGES[p.handle] : null;
+  // Product media: each colour's photo in colour order (the first is the featured image), then extras.
+  const files = pictures
+    ? [...new Set([...p.colours.map((c) => pictures.colours[c]), ...(pictures.extra ?? [])])].map((key) => ({ id: imageIds[key] }))
+    : undefined;
   return {
     identifier: { handle: p.handle },
     input: {
@@ -78,9 +103,11 @@ function productLine(p) {
           price: p.price.toFixed(2),
           inventoryPolicy: 'DENY',
           inventoryItem: { sku: `${sku}-${COLOUR_CODE[colour]}-${SIZE_CODE[size] ?? size}`, tracked: true },
-          inventoryQuantities: [{ locationId, name: 'available', quantity: quantity(colour, size) }]
+          inventoryQuantities: [{ locationId, name: 'available', quantity: quantity(colour, size) }],
+          ...(pictures && { file: { id: imageIds[pictures.colours[colour]] } })
         }))
       ),
+      ...(files && { files }),
       metafields: metafields(p)
     }
   };

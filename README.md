@@ -20,6 +20,13 @@ pnpm dev
 
 Open http://localhost:3000.
 
+## Deploy (Netlify)
+`netlify.toml` sets the build (`pnpm build`, Node 22). Netlify detects Next.js and adds its adapter automatically.
+1. Netlify → Add new project → Import an existing project → GitHub → `store-shadoz`, branch `main`.
+2. Site configuration → Environment variables: add the four variables from `.env.example`, with the real
+   tokens. Mark the private token as secret.
+3. Deploy. Every push to `main` redeploys.
+
 ## Project layout
 - `app/` routes and the root layout (fonts, theme script, metadata)
 - `components/` shared UI

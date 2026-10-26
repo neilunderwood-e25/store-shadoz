@@ -1,0 +1,12 @@
+# Read-only. Checks the uploaded photos have finished processing (fileStatus READY).
+query CheckImages($ids: [ID!]!) {
+  nodes(ids: $ids) {
+    ... on MediaImage {
+      id
+      fileStatus
+      fileErrors {
+        message
+      }
+    }
+  }
+}

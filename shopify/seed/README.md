@@ -45,6 +45,28 @@ shopify store execute --store shadoz-dev-k7sis72f.myshopify.com --query-file sho
 shopify store execute --store shadoz-dev-k7sis72f.myshopify.com --query-file shopify/seed/08-verify-published.graphql --variables '{"pub":"<Headless publication id>"}'
 ```
 
+## Product images (placeholders)
+`images.mjs` lists 43 free Unsplash photos (black / charcoal / off-white basics, no visible logos) and
+which photo each product shows for each colour. Shopify fetches them from Unsplash and keeps its own
+copies, each uploaded once and shared by ID, so there are no duplicates.
+
+| Step | What it does | Writes to the store? |
+| --- | --- | --- |
+| 12. `store auth` again | Adds `read_files` and `write_files` | No |
+| 13. `build-images.mjs` | Checks every product colour has a photo; writes `images.variables.json` | No (local file) |
+| 14. `09-create-images.graphql` | Uploads the 43 photos to Shopify Files; results in `out-09-images.json` | Yes |
+| 15. `build-products.mjs` + `03-products.graphql` | Rebuilds `products.jsonl` with the photos and re-runs the upsert: product media plus each variant's colour photo | Yes |
+
+```bash
+shopify store auth --store shadoz-dev-k7sis72f.myshopify.com --scopes read_products,write_products,read_inventory,write_inventory,read_locations,read_markets_home,read_publications,write_publications,read_files,write_files
+node shopify/seed/build-images.mjs
+shopify store execute --store shadoz-dev-k7sis72f.myshopify.com --query-file shopify/seed/09-create-images.graphql --variable-file shopify/seed/images.variables.json --allow-mutations --json > shopify/seed/out-09-images.json
+node shopify/seed/build-products.mjs --location gid://shopify/Location/78771257578
+shopify store bulk execute --store shadoz-dev-k7sis72f.myshopify.com --query-file shopify/seed/03-products.graphql --variable-file shopify/seed/products.jsonl --allow-mutations --watch --output-file shopify/seed/out-03-products.jsonl
+```
+
+Re-running the upsert also resets stock to the numbers in `catalog.mjs`. That's fine while there are no real orders.
+
 ## How the catalogue maps to Shopify
 - **Options:** Colour and Size. Variant SKUs follow `<base>-<colour>-<size>`, e.g. `SZ-TEE-001-BLK-M`.
 - **Product type** = the design's category (Tees, Socks…), which drives the Category filter.

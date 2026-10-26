@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { HeroSignal } from "@/components/hero-signal";
 import { ArrowRightIcon } from "@/components/icons";
@@ -70,7 +71,16 @@ async function NewIn() {
     <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
       {collection.products.map((product) => (
         <li key={product.id}>
-          <div className="sz-grain aspect-[4/5] rounded-md bg-gradient-to-b from-surface-2 to-surface-3">
+          <div className="sz-grain aspect-[4/5] overflow-hidden rounded-md bg-gradient-to-b from-surface-2 to-surface-3">
+            {product.image && (
+              <Image
+                src={product.image.url}
+                alt={product.image.altText ?? product.title}
+                fill
+                sizes="(min-width: 768px) 25vw, 50vw"
+                className="object-cover"
+              />
+            )}
             {product.badges.length > 0 && (
               <div className="absolute top-3 left-3 z-[2] flex gap-1">
                 {product.badges.map((badge) => (

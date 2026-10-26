@@ -13,6 +13,12 @@ const COLLECTION_PRODUCTS_QUERY = /* GraphQL */ `
           title
           availableForSale
           tags
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
           priceRange {
             minVariantPrice {
               amount
@@ -41,6 +47,7 @@ type CollectionProductsData = {
         title: string;
         availableForSale: boolean;
         tags: string[];
+        featuredImage: ShopifyImage | null;
         priceRange: { minVariantPrice: Money };
         options: { name: string; optionValues: { name: string }[] }[];
       }[];
@@ -48,11 +55,19 @@ type CollectionProductsData = {
   } | null;
 };
 
+export type ShopifyImage = {
+  url: string;
+  altText: string | null;
+  width: number;
+  height: number;
+};
+
 // What a product card needs, shaped the way the design's Card component reads it.
 export type ProductCard = {
   id: string;
   handle: string;
   title: string;
+  image: ShopifyImage | null;
   price: Money;
   colours: string[];
   badges: string[];
@@ -73,6 +88,7 @@ export async function getCollectionProducts(handle: string, first = 12) {
         id: p.id,
         handle: p.handle,
         title: p.title,
+        image: p.featuredImage,
         price: p.priceRange.minVariantPrice,
         colours: p.options.find((o) => o.name === "Colour")?.optionValues.map((v) => v.name) ?? [],
         // Same badges, in the same order, as the design's collection grid.
