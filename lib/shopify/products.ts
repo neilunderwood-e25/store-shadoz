@@ -13,11 +13,13 @@ const COLLECTION_PRODUCTS_QUERY = /* GraphQL */ `
           title
           availableForSale
           tags
-          featuredImage {
-            url
-            altText
-            width
-            height
+          images(first: 2) {
+            nodes {
+              url
+              altText
+              width
+              height
+            }
           }
           priceRange {
             minVariantPrice {
@@ -47,7 +49,7 @@ type CollectionProductsData = {
         title: string;
         availableForSale: boolean;
         tags: string[];
-        featuredImage: ShopifyImage | null;
+        images: { nodes: ShopifyImage[] };
         priceRange: { minVariantPrice: Money };
         options: { name: string; optionValues: { name: string }[] }[];
       }[];
@@ -68,6 +70,8 @@ export type ProductCard = {
   handle: string;
   title: string;
   image: ShopifyImage | null;
+  // Shown on hover, as the design's card swaps "front" for "on body".
+  hoverImage: ShopifyImage | null;
   price: Money;
   colours: string[];
   badges: string[];
@@ -88,7 +92,8 @@ export async function getCollectionProducts(handle: string, first = 12) {
         id: p.id,
         handle: p.handle,
         title: p.title,
-        image: p.featuredImage,
+        image: p.images.nodes[0] ?? null,
+        hoverImage: p.images.nodes[1] ?? null,
         price: p.priceRange.minVariantPrice,
         colours: p.options.find((o) => o.name === "Colour")?.optionValues.map((v) => v.name) ?? [],
         // Same badges, in the same order, as the design's collection grid.

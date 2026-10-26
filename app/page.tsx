@@ -1,11 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { HeroSignal } from "@/components/hero-signal";
 import { ArrowRightIcon } from "@/components/icons";
+import { ProductCard } from "@/components/product-card";
 import { LINKS } from "@/lib/navigation";
 import { isShopifyConfigured } from "@/lib/shopify/client";
 import { getCollectionProducts } from "@/lib/shopify/products";
-import { formatMoney } from "@/lib/money";
 
 // Foundation check: the design's hero (so the header's over-hero mode can be seen) and a live
 // Storefront API read. Replaced by the real Home page in Phase 2.
@@ -44,7 +43,9 @@ export default function Home() {
       <section className="mx-auto w-full max-w-[var(--max-content)] px-[var(--page-margin)] py-24">
         <div className="flex items-baseline justify-between">
           <h2 className="font-display text-h2 text-fg uppercase">New in</h2>
-          <span className="sz-label text-muted">From Shopify</span>
+          <Link href={LINKS.newIn} className="sz-label text-fg underline decoration-muted underline-offset-[6px]">
+            View all
+          </Link>
         </div>
         <NewIn />
       </section>
@@ -68,34 +69,10 @@ async function NewIn() {
   }
 
   return (
-    <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
+    <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-4 md:gap-6">
       {collection.products.map((product) => (
-        <li key={product.id}>
-          <div className="sz-grain aspect-[4/5] overflow-hidden rounded-md bg-gradient-to-b from-surface-2 to-surface-3">
-            {product.image && (
-              <Image
-                src={product.image.url}
-                alt={product.image.altText ?? product.title}
-                fill
-                sizes="(min-width: 768px) 25vw, 50vw"
-                className="object-cover"
-              />
-            )}
-            {product.badges.length > 0 && (
-              <div className="absolute top-3 left-3 z-[2] flex gap-1">
-                {product.badges.map((badge) => (
-                  <span key={badge} className="sz-label rounded-sm bg-bg/80 px-2 py-1 text-micro text-fg">
-                    {badge}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-          <p className="mt-3 text-body text-fg">{product.title}</p>
-          <p className="font-mono text-body-s text-muted">{formatMoney(product.price)}</p>
-          <p className="text-body-s text-faint">{product.colours.join(" · ")}</p>
-        </li>
+        <ProductCard key={product.id} product={product} sizes="(min-width: 768px) 25vw, 50vw" />
       ))}
-    </ul>
+    </div>
   );
 }
