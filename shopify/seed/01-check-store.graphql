@@ -1,0 +1,18 @@
+# Read-only. Confirms currency and tax settings, and returns the location ID the product import needs.
+query CheckStore {
+  shop {
+    name
+    currencyCode
+    taxesIncluded
+  }
+  locations(first: 5) {
+    nodes {
+      id
+      name
+      isActive
+    }
+  }
+  productsCount {
+    count
+  }
+}

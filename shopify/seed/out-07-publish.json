@@ -1,0 +1,15 @@
+{
+  "publicationUpdate": {
+    "publication": null,
+    "userErrors": [
+      {
+        "field": [
+          "input",
+          "publishablesToAdd",
+          "50"
+        ],
+        "message": "A catalog publication can only contain products."
+      }
+    ]
+  }
+}

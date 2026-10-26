@@ -1,0 +1,44 @@
+{
+  "mens": {
+    "collection": {
+      "id": "gid://shopify/Collection/455362248938",
+      "handle": "mens"
+    },
+    "userErrors": []
+  },
+  "womens": {
+    "collection": {
+      "id": "gid://shopify/Collection/455362281706",
+      "handle": "womens"
+    },
+    "userErrors": []
+  },
+  "sportswear": {
+    "collection": {
+      "id": "gid://shopify/Collection/455362314474",
+      "handle": "sportswear"
+    },
+    "userErrors": []
+  },
+  "accessories": {
+    "collection": {
+      "id": "gid://shopify/Collection/455362347242",
+      "handle": "accessories"
+    },
+    "userErrors": []
+  },
+  "shopAll": {
+    "collection": {
+      "id": "gid://shopify/Collection/455362380010",
+      "handle": "shop-all"
+    },
+    "userErrors": []
+  },
+  "newIn": {
+    "collection": {
+      "id": "gid://shopify/Collection/455362412778",
+      "handle": "new-in"
+    },
+    "userErrors": []
+  }
+}

@@ -1,0 +1,8 @@
+# Adds the imported products and collections to one publication in a single call.
+# Variables come from publish.variables.json (built by build-publish.mjs).
+mutation PublishToHeadless($id: ID!, $publishables: [ID!]!) {
+  publicationUpdate(id: $id, input: { publishablesToAdd: $publishables }) {
+    publication { id }
+    userErrors { field message }
+  }
+}

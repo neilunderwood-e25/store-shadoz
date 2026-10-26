@@ -1,0 +1,11 @@
+# Read-only. Lists the store's sales-channel publications, to find the Headless one.
+query FindPublications {
+  publications(first: 20) {
+    nodes {
+      id
+      autoPublish
+      catalog { title }
+      channels(first: 2) { nodes { name handle } }
+    }
+  }
+}

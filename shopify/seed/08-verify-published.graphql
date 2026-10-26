@@ -1,0 +1,11 @@
+# Read-only. Confirms what the Headless publication now includes.
+query VerifyPublished($pub: ID!) {
+  publication(id: $pub) { includedProductsCount { count } }
+  tee: productByIdentifier(identifier: { handle: "heavyweight-tee" }) { publishedOnPublication(publicationId: $pub) }
+  mens: collectionByIdentifier(identifier: { handle: "mens" }) { publishedOnPublication(publicationId: $pub) }
+  womens: collectionByIdentifier(identifier: { handle: "womens" }) { publishedOnPublication(publicationId: $pub) }
+  sportswear: collectionByIdentifier(identifier: { handle: "sportswear" }) { publishedOnPublication(publicationId: $pub) }
+  accessories: collectionByIdentifier(identifier: { handle: "accessories" }) { publishedOnPublication(publicationId: $pub) }
+  shopAll: collectionByIdentifier(identifier: { handle: "shop-all" }) { publishedOnPublication(publicationId: $pub) }
+  newIn: collectionByIdentifier(identifier: { handle: "new-in" }) { publishedOnPublication(publicationId: $pub) }
+}

@@ -1,0 +1,79 @@
+{
+  "gender": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155421418",
+      "key": "gender"
+    },
+    "userErrors": []
+  },
+  "fit": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155454186",
+      "key": "fit"
+    },
+    "userErrors": []
+  },
+  "feature": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155486954",
+      "key": "feature"
+    },
+    "userErrors": []
+  },
+  "fitNote": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155519722",
+      "key": "fit_note"
+    },
+    "userErrors": []
+  },
+  "fitDetails": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155552490",
+      "key": "fit_details"
+    },
+    "userErrors": []
+  },
+  "details": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155585258",
+      "key": "details"
+    },
+    "userErrors": []
+  },
+  "care": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155618026",
+      "key": "care"
+    },
+    "userErrors": []
+  },
+  "sizeNote": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155650794",
+      "key": "size_note"
+    },
+    "userErrors": []
+  },
+  "sizeGuide": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155683562",
+      "key": "size_guide"
+    },
+    "userErrors": []
+  },
+  "sizeGuideNote": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155716330",
+      "key": "size_guide_note"
+    },
+    "userErrors": []
+  },
+  "released": {
+    "createdDefinition": {
+      "id": "gid://shopify/MetafieldDefinition/159155749098",
+      "key": "released"
+    },
+    "userErrors": []
+  }
+}

@@ -1,0 +1,304 @@
+@import "tailwindcss";
+
+/* ---- Shadoz colour tokens, from the design's site.css. Dark is the default look. ----
+   bg          page background            fg       headings, primary text, the accent
+   surface     cards, panels, drawers     fg-2     strong secondary text
+   surface-2   raised / hover surfaces    text     body text
+   surface-3   deepest surface            muted    labels, meta, placeholders
+   border      hairlines                  faint    disabled text
+   border-2    control outlines
+   glass-rgb   header notch, menus, drawers (used at ~75–90% with blur)
+   line-rgb    thin lines and tints drawn on glass */
+:root,
+[data-theme="dark"],
+/* Over a dark hero the header's nav keeps these light-on-dark colours until the notch fills in. */
+html:has([data-sz-hero]) [data-sz-navtheme]:not([data-sz-solid]) {
+  --sz-bg: #0b0b0a;
+  --sz-surface: #171716;
+  --sz-surface-2: #1f1f1d;
+  --sz-surface-3: #111110;
+  --sz-border: #2a2927;
+  --sz-border-2: #3b3a37;
+  --sz-fg: #f5f3ee;
+  --sz-fg-2: #cbc6bb;
+  --sz-text: #aaa59b;
+  --sz-muted: #86827a;
+  --sz-faint: #5e5b55;
+  --sz-accent: var(--sz-fg);
+  --sz-on-accent: var(--sz-bg);
+  --sz-glass-rgb: 11, 11, 11;
+  --sz-line-rgb: 245, 243, 238;
+  --sz-backdrop: rgba(0, 0, 0, 0.4);
+  --sz-drawer-shadow: -24px 0 64px rgba(0, 0, 0, 0.45);
+  --sz-panel-shadow: 24px 0 64px rgba(0, 0, 0, 0.45);
+  --sz-pop-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+  /* product card: a white glow on dark */
+  --sz-glow-none: 0 0 0 0 rgba(255, 255, 255, 0), 0 0 0 0 rgba(255, 255, 255, 0);
+  --sz-glow-hover: 0 0 32px 4px rgba(255, 255, 255, 0.12), 0 0 0 0 rgba(255, 255, 255, 0);
+  --sz-glow-tap: 0 0 20px 2px rgba(255, 255, 255, 0.07), 0 0 0 0 rgba(255, 255, 255, 0);
+  --sz-logo-filter: none;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --sz-bg: #f4f2ee;
+  --sz-surface: #ebe8e2;
+  --sz-surface-2: #e3dfd7;
+  --sz-surface-3: #faf9f6;
+  --sz-border: #dcd8d0;
+  --sz-border-2: #c6c1b7;
+  --sz-fg: #151513;
+  --sz-fg-2: #2f2d2a;
+  --sz-text: #4a4742;
+  --sz-muted: #77736b;
+  --sz-faint: #a7a298;
+  --sz-glass-rgb: 244, 242, 238;
+  --sz-line-rgb: 21, 21, 19;
+  --sz-backdrop: rgba(21, 21, 19, 0.22);
+  --sz-drawer-shadow: -24px 0 64px rgba(21, 21, 19, 0.14);
+  --sz-panel-shadow: 24px 0 64px rgba(21, 21, 19, 0.14);
+  --sz-pop-shadow: 0 18px 48px rgba(21, 21, 19, 0.14);
+  /* product card: a soft, diffused dark shadow on light */
+  --sz-glow-none: 0 0 0 0 rgba(21, 21, 19, 0), 0 0 0 0 rgba(21, 21, 19, 0);
+  --sz-glow-hover: 0 0 40px 6px rgba(21, 21, 19, 0.11), 0 10px 28px -10px rgba(21, 21, 19, 0.12);
+  --sz-glow-tap: 0 0 24px 2px rgba(21, 21, 19, 0.07), 0 6px 16px -8px rgba(21, 21, 19, 0.08);
+  --sz-logo-filter: brightness(0);
+  color-scheme: light;
+}
+
+/* No saved choice and no script yet: follow the device. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --sz-bg: #f4f2ee;
+    --sz-surface: #ebe8e2;
+    --sz-surface-2: #e3dfd7;
+    --sz-surface-3: #faf9f6;
+    --sz-border: #dcd8d0;
+    --sz-border-2: #c6c1b7;
+    --sz-fg: #151513;
+    --sz-fg-2: #2f2d2a;
+    --sz-text: #4a4742;
+    --sz-muted: #77736b;
+    --sz-faint: #a7a298;
+    --sz-glass-rgb: 244, 242, 238;
+    --sz-line-rgb: 21, 21, 19;
+    --sz-backdrop: rgba(21, 21, 19, 0.22);
+    --sz-drawer-shadow: -24px 0 64px rgba(21, 21, 19, 0.14);
+    --sz-panel-shadow: 24px 0 64px rgba(21, 21, 19, 0.14);
+    --sz-pop-shadow: 0 18px 48px rgba(21, 21, 19, 0.14);
+    --sz-glow-none: 0 0 0 0 rgba(21, 21, 19, 0), 0 0 0 0 rgba(21, 21, 19, 0);
+    --sz-glow-hover: 0 0 40px 6px rgba(21, 21, 19, 0.11), 0 10px 28px -10px rgba(21, 21, 19, 0.12);
+    --sz-glow-tap: 0 0 24px 2px rgba(21, 21, 19, 0.07), 0 6px 16px -8px rgba(21, 21, 19, 0.08);
+    --sz-logo-filter: brightness(0);
+    color-scheme: light;
+  }
+}
+
+/* Product shots, hero and editorial images look the same in both modes,
+   so anything drawn on top of them keeps its dark-mode colours. */
+.sz-grain {
+  --sz-bg: #0b0b0a;
+  --sz-surface: #171716;
+  --sz-surface-2: #1f1f1d;
+  --sz-surface-3: #111110;
+  --sz-border: #2a2927;
+  --sz-border-2: #3b3a37;
+  --sz-fg: #f5f3ee;
+  --sz-fg-2: #cbc6bb;
+  --sz-text: #aaa59b;
+  --sz-muted: #86827a;
+  --sz-faint: #5e5b55;
+  --sz-glass-rgb: 11, 11, 11;
+  --sz-line-rgb: 245, 243, 238;
+  --sz-logo-filter: none;
+}
+
+/* ---- Layout values the design keeps outside the colour tokens ---- */
+:root {
+  --page-margin: clamp(16px, 4vw, 56px);
+  --max-content: 1440px;
+  --header-h: 64px;
+  --announce-h: 32px;
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --grain-opacity: 0.09;
+}
+
+/* ---- Tailwind theme: utilities read the tokens above, so both modes work without dark: variants ---- */
+@theme inline {
+  --color-bg: var(--sz-bg);
+  --color-surface: var(--sz-surface);
+  --color-surface-2: var(--sz-surface-2);
+  --color-surface-3: var(--sz-surface-3);
+  --color-border: var(--sz-border);
+  --color-border-2: var(--sz-border-2);
+  --color-fg: var(--sz-fg);
+  --color-fg-2: var(--sz-fg-2);
+  --color-text: var(--sz-text);
+  --color-muted: var(--sz-muted);
+  --color-faint: var(--sz-faint);
+  --color-accent: var(--sz-accent);
+  --color-on-accent: var(--sz-on-accent);
+  --color-error: #9a6b5c;
+  --color-ok: #7d8270;
+
+  --font-display: var(--font-anta), var(--font-archivo), system-ui, sans-serif;
+  --font-sans: var(--font-archivo), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-drawer: var(--sz-drawer-shadow);
+  --shadow-panel: var(--sz-panel-shadow);
+  --shadow-pop: var(--sz-pop-shadow);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.6, 0, 0.2, 1);
+  --ease-sz: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* type scale */
+  --text-display-xl: clamp(64px, 11vw, 168px);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: 0.01em;
+  --text-display-l: clamp(48px, 7vw, 104px);
+  --text-display-l--line-height: 0.92;
+  --text-display-l--letter-spacing: 0.01em;
+  --text-display-m: 56px;
+  --text-display-m--line-height: 0.92;
+  --text-display-m--letter-spacing: 0.01em;
+  --text-h1: 40px;
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: 0.02em;
+  --text-h2: 28px;
+  --text-h2--line-height: 1.05;
+  --text-h2--letter-spacing: 0.02em;
+  --text-h3: 20px;
+  --text-h3--line-height: 1.05;
+  --text-h3--letter-spacing: 0.02em;
+  --text-body-l: 17px;
+  --text-body-l--line-height: 1.55;
+  --text-body: 15px;
+  --text-body--line-height: 1.55;
+  --text-body-s: 13px;
+  --text-body-s--line-height: 1.55;
+  --text-label: 11px;
+  --text-label--line-height: 1.55;
+  --text-label--letter-spacing: 0.14em;
+  --text-micro: 10px;
+  --text-micro--line-height: 1.55;
+  --text-micro--letter-spacing: 0.14em;
+}
+
+/* ---- Base ---- */
+@layer base {
+  body {
+    background: var(--sz-bg);
+    color: var(--sz-text);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  a {
+    color: var(--sz-fg);
+    transition: opacity 140ms var(--ease-out);
+  }
+
+  a:hover {
+    opacity: 0.64;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--sz-fg-2);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--sz-fg);
+    color: var(--sz-bg);
+  }
+}
+
+/* ---- Shared type styles from the design system ---- */
+@utility sz-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  color: var(--sz-fg);
+}
+
+@utility sz-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Film grain over product shots and editorial images. */
+.sz-grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.sz-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: var(--grain);
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* ---- Header ----
+   Pages that open with a full-bleed hero mark it with data-sz-hero: the header then sits over the
+   hero (no spacer) with a soft scrim, until the scroll-driven notch takes over. */
+html:has([data-sz-hero]) .sz-header-spacer {
+  display: none;
+}
+
+.sz-scrim {
+  opacity: 0;
+}
+
+html:has([data-sz-hero]) .sz-scrim {
+  opacity: 1;
+}
+
+/* Header text swaps between "over a dark hero" and "on the glass" with a short colour fade. */
+[data-sz-navtheme] a,
+[data-sz-navtheme] button,
+[data-sz-navtheme] img {
+  transition:
+    color 300ms var(--ease-sz),
+    filter 300ms var(--ease-sz);
+}
+
+/* Switching modes: every colour crossfades for ~400ms, nothing moves. The toggle skips it with reduced motion. */
+html.sz-theming,
+html.sz-theming *,
+html.sz-theming *::before,
+html.sz-theming *::after {
+  transition:
+    background-color 400ms var(--ease-sz),
+    color 400ms var(--ease-sz),
+    border-color 400ms var(--ease-sz),
+    outline-color 400ms var(--ease-sz),
+    fill 400ms var(--ease-sz),
+    stroke 400ms var(--ease-sz),
+    box-shadow 400ms var(--ease-sz),
+    filter 400ms var(--ease-sz) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+  }
+}

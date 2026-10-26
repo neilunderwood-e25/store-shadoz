@@ -1,0 +1,14 @@
+# Run once per line of products.jsonl by `shopify store bulk execute`. Upserts by handle.
+mutation UpsertProduct($identifier: ProductSetIdentifiers, $input: ProductSetInput!) {
+  productSet(identifier: $identifier, input: $input) {
+    product {
+      id
+      handle
+    }
+    userErrors {
+      field
+      message
+      code
+    }
+  }
+}

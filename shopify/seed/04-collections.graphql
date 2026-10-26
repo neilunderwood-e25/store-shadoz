@@ -1,0 +1,55 @@
+# Automated collections, so new products land in the right place from their tags:
+#   Mens / Womens  = apparel for that gender plus unisex
+#   Sportswear / Accessories = their own departments
+#   Shop all = everything tagged "shadoz" (keeps Shopify's demo products out)
+#   New in = tagged "new"
+# Category pages (Tees, Socks…) are filters on these, not separate collections.
+mutation CreateCollections {
+  mens: collectionCreate(collection: {
+    title: "Mens", handle: "mens", sortOrder: BEST_SELLING,
+    descriptionHtml: "<p>Tees, tanks, hoodies, joggers, shorts and boxers. Black, charcoal, off-white.</p>",
+    sources: [{ source: { title: "Mens and unisex", targetType: PRODUCTS, inclusion: { matchType: ALL, conditions: [
+      { productTag: { relation: TAGGED_WITH, values: ["gender:men", "gender:unisex"], matchType: ANY } }
+    ] } } }]
+  }) { collection { id handle } userErrors { field message } }
+
+  womens: collectionCreate(collection: {
+    title: "Womens", handle: "womens", sortOrder: BEST_SELLING,
+    descriptionHtml: "<p>Tees, crop tops, skirts, joggers and underwear. Black, charcoal, off-white.</p>",
+    sources: [{ source: { title: "Womens and unisex", targetType: PRODUCTS, inclusion: { matchType: ALL, conditions: [
+      { productTag: { relation: TAGGED_WITH, values: ["gender:women", "gender:unisex"], matchType: ANY } }
+    ] } } }]
+  }) { collection { id handle } userErrors { field message } }
+
+  sportswear: collectionCreate(collection: {
+    title: "Sportswear", handle: "sportswear", sortOrder: BEST_SELLING,
+    descriptionHtml: "<p>Tops, shorts and leggings built to train in. For everyone.</p>",
+    sources: [{ source: { title: "Sportswear department", targetType: PRODUCTS, inclusion: { matchType: ALL, conditions: [
+      { productTag: { relation: TAGGED_WITH, values: ["dept:sportswear"], matchType: ANY } }
+    ] } } }]
+  }) { collection { id handle } userErrors { field message } }
+
+  accessories: collectionCreate(collection: {
+    title: "Accessories", handle: "accessories", sortOrder: BEST_SELLING,
+    descriptionHtml: "<p>Chains, caps and socks. The finishing pieces.</p>",
+    sources: [{ source: { title: "Accessories department", targetType: PRODUCTS, inclusion: { matchType: ALL, conditions: [
+      { productTag: { relation: TAGGED_WITH, values: ["dept:accessories"], matchType: ANY } }
+    ] } } }]
+  }) { collection { id handle } userErrors { field message } }
+
+  shopAll: collectionCreate(collection: {
+    title: "Shop all", handle: "shop-all", sortOrder: BEST_SELLING,
+    descriptionHtml: "<p>Everything — tees to underwear, plus accessories. Three colours. Cut and sewn in Sri Lanka.</p>",
+    sources: [{ source: { title: "All Shadoz products", targetType: PRODUCTS, inclusion: { matchType: ALL, conditions: [
+      { productTag: { relation: TAGGED_WITH, values: ["shadoz"], matchType: ANY } }
+    ] } } }]
+  }) { collection { id handle } userErrors { field message } }
+
+  newIn: collectionCreate(collection: {
+    title: "New in", handle: "new-in", sortOrder: CREATED_DESC,
+    descriptionHtml: "<p>The latest drop.</p>",
+    sources: [{ source: { title: "Tagged new", targetType: PRODUCTS, inclusion: { matchType: ALL, conditions: [
+      { productTag: { relation: TAGGED_WITH, values: ["new"], matchType: ANY } }
+    ] } } }]
+  }) { collection { id handle } userErrors { field message } }
+}

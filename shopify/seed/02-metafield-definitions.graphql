@@ -1,0 +1,62 @@
+# Product fields the storefront reads (fit, care, size guide…) and the extra filters
+# from the design (Gender, Fit, Features). Readable by the storefront; the three
+# filter fields are limited to the design's values so Search & Discovery can offer them.
+mutation CreateProductMetafieldDefinitions {
+  gender: metafieldDefinitionCreate(definition: {
+    name: "Gender", namespace: "custom", key: "gender", ownerType: PRODUCT, type: "single_line_text_field", pin: true,
+    validations: [{ name: "choices", value: "[\"Men\",\"Women\",\"Unisex\",\"All\"]" }],
+    access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  fit: metafieldDefinitionCreate(definition: {
+    name: "Fit", namespace: "custom", key: "fit", ownerType: PRODUCT, type: "single_line_text_field", pin: true,
+    validations: [{ name: "choices", value: "[\"Oversized\",\"Boxy\",\"Regular\",\"Relaxed\"]" }],
+    access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  feature: metafieldDefinitionCreate(definition: {
+    name: "Feature", namespace: "custom", key: "feature", ownerType: PRODUCT, type: "single_line_text_field", pin: true,
+    validations: [{ name: "choices", value: "[\"Printed\",\"Embroidered\"]" }],
+    access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  fitNote: metafieldDefinitionCreate(definition: {
+    name: "Fit note", description: "Short line under the size picker.", namespace: "custom", key: "fit_note",
+    ownerType: PRODUCT, type: "single_line_text_field", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  fitDetails: metafieldDefinitionCreate(definition: {
+    name: "Fit details", description: "The Fit accordion on the product page.", namespace: "custom", key: "fit_details",
+    ownerType: PRODUCT, type: "multi_line_text_field", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  details: metafieldDefinitionCreate(definition: {
+    name: "Details", description: "The Details accordion on the product page.", namespace: "custom", key: "details",
+    ownerType: PRODUCT, type: "multi_line_text_field", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  care: metafieldDefinitionCreate(definition: {
+    name: "Care", description: "The Care accordion on the product page.", namespace: "custom", key: "care",
+    ownerType: PRODUCT, type: "multi_line_text_field", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  sizeNote: metafieldDefinitionCreate(definition: {
+    name: "Size note", description: "Shown instead of a size picker for one-size products.", namespace: "custom", key: "size_note",
+    ownerType: PRODUCT, type: "single_line_text_field", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  sizeGuide: metafieldDefinitionCreate(definition: {
+    name: "Size guide", description: "Size guide tables by fit (men / women): { head: [...], rows: [[...]] }.", namespace: "custom", key: "size_guide",
+    ownerType: PRODUCT, type: "json", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  sizeGuideNote: metafieldDefinitionCreate(definition: {
+    name: "Size guide note", namespace: "custom", key: "size_guide_note",
+    ownerType: PRODUCT, type: "single_line_text_field", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+
+  released: metafieldDefinitionCreate(definition: {
+    name: "Released", description: "Drop date, used for New in and date sorting.", namespace: "custom", key: "released",
+    ownerType: PRODUCT, type: "date", pin: true, access: { storefront: PUBLIC_READ }
+  }) { createdDefinition { id key } userErrors { field message code } }
+}

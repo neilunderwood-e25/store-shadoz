@@ -1,0 +1,18 @@
+# Read-only. Counts what the import created and spot-checks one product.
+query VerifyImport {
+  shadoz: productsCount(query: "tag:shadoz") { count }
+  all: productsCount { count }
+  mens: collectionByIdentifier(identifier: { handle: "mens" }) { productsCount { count } }
+  womens: collectionByIdentifier(identifier: { handle: "womens" }) { productsCount { count } }
+  sportswear: collectionByIdentifier(identifier: { handle: "sportswear" }) { productsCount { count } }
+  accessories: collectionByIdentifier(identifier: { handle: "accessories" }) { productsCount { count } }
+  shopAll: collectionByIdentifier(identifier: { handle: "shop-all" }) { productsCount { count } }
+  newIn: collectionByIdentifier(identifier: { handle: "new-in" }) { productsCount { count } }
+  tee: productByIdentifier(identifier: { handle: "heavyweight-tee" }) {
+    title
+    totalInventory
+    variantsCount { count }
+    fit: metafield(namespace: "custom", key: "fit") { value }
+    sizeGuide: metafield(namespace: "custom", key: "size_guide") { type }
+  }
+}
